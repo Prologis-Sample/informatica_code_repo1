@@ -1,0 +1,65 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Version
+    displayName: Read and generate job versions
+    jobs:
+      - job: Versioning
+        displayName: Read job file and create next version
+        steps:
+          - checkout: self
+            submodules: true
+            persistCredentials: true 
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                jobName=`cat job_file.txt | grep "Job Name" | cut -d ":" -f2 | sed 's/"//g'`
+                version=`cat job_file.txt |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'`
+                major=`echo $version | cut -d "." -f1`
+                minor=`echo $version | cut -d "." -f2`
+                patch=`echo $version | cut -d "." -f3`
+                newpatch=$(expr "$patch" + 1)
+                newversion=`echo $major.$minor.$newpatch` 
+                echo $version 
+                current_dir=`pwd`
+                echo $current_dir            
+                touch newfile.txt
+                ls
+                #sed 's/"Version" : "${version"/"Version" : "\'$newversion\'"/g\' job_file.txt > newfile.txt
+                #sed  's/\"Version\" : \"'$version'\"/\"Version\" : \"'$newversion'\"/g' job_file.txt > newfile.txt
+                #cat job_file.txt
+                #cat newfile.txt
+                echo "Hello" >> job_file.txt
+                #mv newfile.txt job_file.txt
+                ls
+                echo "Setting git config..."
+                git config --global user.email "jenithangel@gmail.com"
+                git config --global user.name "angeljenitha"
+                git add job_file.txt
+                git commit -m "version $newversion"
+                git push orgin
+                echo "Execute Completed"
+                
+                
+          
+          
+
+
+
+  - stage: DevUnitTest
+    displayName: Simple Unit test case run
+  - stage: ExportFromDev
+    displayName: Export the source file from dev
+  - stage: UploadArtifact
+    displayName: Upload the artifact with version to git repo
+  
