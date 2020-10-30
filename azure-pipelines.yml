@@ -45,6 +45,7 @@ stages:
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
+                git config pull.rebase false 
                 git checkout -b branch_new
                 git add *
                 git status
