@@ -60,6 +60,20 @@ stages:
 
   - stage: DevUnitTest
     displayName: Simple Unit test case run
+    jobs:
+      - job: sample
+        displayName: sample test
+        steps:
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                version=1.0.0
+                newversion=1.0.1
+                sed 's/"Version" : "1.0.0"/"Version" : "$newversion"/g' latest.txt >latest1.txt
+                cat latest.txt
+                cat latest1.txt
+
   - stage: ExportFromDev
     displayName: Export the source file from dev
   - stage: UploadArtifact
