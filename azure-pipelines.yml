@@ -47,7 +47,7 @@ stages:
                 git config --global user.name "angeljenitha"
                 git add job_file.txt
                 git commit -m "version $newversion"
-                git push orgin HEAD:https://github.com/Prologis-Sample/informatica_code_repo1               
+                git push orgin 
                 echo "Execute Completed"
                 
                 
