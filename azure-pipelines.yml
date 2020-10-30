@@ -32,6 +32,8 @@ stages:
                 newversion=`echo $major.$minor.$newpatch` 
                 echo $version                          
                 sed "s/$version/$newversion/g" job_file.txt > newfile.txt
+                cat job_file.txt
+                cat newfile.txt
                 mv newfile.txt job_file.txt
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
