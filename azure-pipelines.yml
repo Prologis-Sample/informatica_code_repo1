@@ -48,8 +48,8 @@ stages:
                 git add *
                 git commit -m "version $newversion"
                 git remote -v
-                branch_1=`git branch`
-                git push  origin $branch_1
+                #branch_1=`git branch`
+                git push  origin origin/main
                 echo "Execute Completed"
                 
                 
