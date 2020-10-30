@@ -52,6 +52,7 @@ stages:
                 git merge branch_new
                 #git remote -v
                 #branch_1=`git branch`
+                git pull
                 git push origin branch_new
                 #git push 
                 git status
