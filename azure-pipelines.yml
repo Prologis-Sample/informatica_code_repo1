@@ -25,6 +25,7 @@ stages:
               script: |
                 jobName=`cat job_file.txt | grep "Job Name" | cut -d ":" -f2 | sed 's/"//g'`
                 version=`cat job_file.txt |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'`
+                echo $version
                 major=`echo $version | cut -d "." -f1`
                 minor=`echo $version | cut -d "." -f2`
                 patch=`echo $version | cut -d "." -f3|sed 's/"//g'`
