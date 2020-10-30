@@ -47,6 +47,9 @@ stages:
                 git config --global user.name "angeljenitha"
                 git add job_file.txt
                 git commit -m "version $newversion"
+                git switch -
+                cu=`pwd`
+                echo $cu
                 git push orgin 
                 echo "Execute Completed"
                 
