@@ -33,30 +33,23 @@ stages:
                 echo $version 
                 current_dir=`pwd`
                 echo $current_dir            
-                touch newfile.txt
+                #touch newfile.txt
+                touch latest.txt
                 ls
                 #sed 's/"Version" : "${version"/"Version" : "\'$newversion\'"/g\' job_file.txt > newfile.txt
                 #sed  's/\"Version\" : \"'$version'\"/\"Version\" : \"'$newversion'\"/g' job_file.txt > newfile.txt
                 #cat job_file.txt
                 #cat newfile.txt
-                echo "Hello" >> job_file.txt
+                #echo "Hello" >> job_file.txt
                 #mv newfile.txt job_file.txt
                 ls
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
-                git config pull.rebase false 
-                git checkout -b branch_new
                 git add *
                 git status
                 git commit -m "version $newversion"
-                git merge branch_new
-                #git remote -v
-                #branch_1=`git branch`
-                git pull
-                git push origin branch_new
-                #git push 
-                git status
+                git push origin HEAD:main
                 echo "Execute Completed"
                 
                 
