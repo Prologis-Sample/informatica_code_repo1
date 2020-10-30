@@ -45,11 +45,14 @@ stages:
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
-                git add *
-                git commit -m "version $newversion"
-                git remote -v
+                git checkout -b branch_new
+                git checkout master
+                
+                #git add *
+                #git commit -m "version $newversion"
+                #git remote -v
                 #branch_1=`git branch`
-                git push origin HEAD:main
+                #git push origin HEAD:main
                 git status
                 echo "Execute Completed"
                 
