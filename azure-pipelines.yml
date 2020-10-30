@@ -52,7 +52,7 @@ stages:
                 git merge branch_new
                 #git remote -v
                 #branch_1=`git branch`
-                #git push origin HEAD:main
+                git push 
                 git status
                 echo "Execute Completed"
                 
