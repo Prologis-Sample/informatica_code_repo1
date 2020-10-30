@@ -49,7 +49,8 @@ stages:
                 git commit -m "version $newversion"
                 git remote -v
                 #branch_1=`git branch`
-                git push  origin origin/main
+                git push Origin HEAD:origin/main
+
                 echo "Execute Completed"
                 
                 
