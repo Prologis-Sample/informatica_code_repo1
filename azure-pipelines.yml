@@ -48,7 +48,8 @@ stages:
                 git add job_file.txt
                 git commit -m "version $newversion"
                 git remote -v
-                git push origin main
+                git branch
+                #git push origin main
                 echo "Execute Completed"
                 
                 
