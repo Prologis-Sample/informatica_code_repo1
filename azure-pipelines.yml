@@ -30,19 +30,9 @@ stages:
                 patch=`echo $version | cut -d "." -f3`
                 newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
-                echo $version 
-                current_dir=`pwd`
-                echo $current_dir            
-                #touch newfile.txt
-                touch latest.txt
-                ls
-                #sed 's/"Version" : "${version"/"Version" : "\'$newversion\'"/g\' job_file.txt > newfile.txt
-                #sed  's/\"Version\" : \"'$version'\"/\"Version\" : \"'$newversion'\"/g' job_file.txt > newfile.txt
-                #cat job_file.txt
-                #cat newfile.txt
-                #echo "Hello" >> job_file.txt
-                #mv newfile.txt job_file.txt
-                ls
+                echo $version                          
+                sed "s/$version/$newversion/g" job_file.txt > newfile.txt
+                mv newfile.txt job_file.txt
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
