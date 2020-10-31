@@ -62,11 +62,11 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                version=1.0.0
-                newversion=1.0.1
-                sed "s/$version/$newversion/g" latest.txt >latest1.txt
-                cat latest.txt
-                cat latest1.txt
+                echo $version
+                echo $jobName
+                #sed "s/$version/$newversion/g" latest.txt >latest1.txt
+                #cat latest.txt
+                #cat latest1.txt
 
   - stage: ExportFromDev
     displayName: Export the source file from dev
