@@ -28,7 +28,8 @@ stages:
                 major=`echo $version | cut -d "." -f1`
                 minor=`echo $version | cut -d "." -f2`
                 patch=`echo $version | cut -d "." -f3`
-                typeset -i patch
+                echo "[$minor]" 
+                echo "[$patch]"
                 newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
                 echo $version $newversion
