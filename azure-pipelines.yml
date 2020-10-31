@@ -24,13 +24,10 @@ stages:
               targetType: 'inline'
               script: |
                 jobName=`cat $(jobfile) | grep "Job Name" | cut -d ":" -f2 | sed 's/"//g'`
-                version=`cat latest.txt |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed -e 's/\r//g'|sed -e 's/ //g'`
+                version=`cat $(jobfile)  |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed -e 's/\r//g'|sed -e 's/ //g'`
                 major=`echo $version | cut -d "." -f1`
                 minor=`echo $version | cut -d "." -f2`
                 patch=`echo $version | cut -d "." -f3`
-                echo "[$minor]" 
-                echo "[$patch]"
-                echo "[$version]"
                 newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
                 echo "[$newversion]"
