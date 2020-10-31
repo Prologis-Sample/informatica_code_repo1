@@ -33,7 +33,7 @@ stages:
                 newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
                 echo "[$newversion]"
-                echo $version $newversion
+                echo "[$version]"
                 sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
                 cat $(jobfile)
                 cat newfile.txt
