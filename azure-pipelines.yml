@@ -33,7 +33,8 @@ stages:
                 if [[ $patch =~ ^[+-]?[0-9]+$ ]]; then
                    echo "Input is an integer."
                 fi
-                newpatch=`echo "$patch" + 1 | bc -l`
+                one=1
+                newpatch=`echo "$patch" + "$one"| bc -l`
                 newversion=`echo $major.$minor.$newpatch` 
                 echo $version  $newversion
                 sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
