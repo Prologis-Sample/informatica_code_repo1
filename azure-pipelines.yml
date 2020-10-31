@@ -34,7 +34,6 @@ stages:
                    echo "Input is an integer."
                 fi
                 newpatch=`echo "$patch" + 1 | bc -l`
-                sum=`echo "$A + $B" | bc -l`
                 newversion=`echo $major.$minor.$newpatch` 
                 echo $version  $newversion
                 sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
