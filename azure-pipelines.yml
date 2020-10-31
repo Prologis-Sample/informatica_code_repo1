@@ -23,20 +23,14 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                jobName=`cat $(jobfile)| grep "Job Name" | cut -d ":" -f2 | sed 's/"//g'`
+                jobName=`cat $(jobfile) | grep "Job Name" | cut -d ":" -f2 | sed 's/"//g'`
                 version=`cat $(jobfile) |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'`
-                echo $version
                 major=`echo $version | cut -d "." -f1`
                 minor=`echo $version | cut -d "." -f2`
                 patch=`echo $version | cut -d "." -f3`
-                echo $major $minor $patch
-                if [[ $patch =~ ^[+-]?[0-9]+$ ]]; then
-                   echo "Input is an integer."
-                fi
-                one=1
-                newpatch=`echo "$patch" + "$one"| bc -l`
+                newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
-                echo $version  $newversion
+                echo $version $newversion
                 sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
                 cat $(jobfile)
                 cat newfile.txt
