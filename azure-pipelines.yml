@@ -27,7 +27,7 @@ stages:
                 version=`cat latest.txt |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'`
                 major=`echo $version | cut -d "." -f1`
                 minor=`echo $version | cut -d "." -f2`
-                patch=`echo $version | cut -d "." -f3`
+                patch=`echo $version | cut -d "." -f3 |sed -e 's/\r//g'`
                 echo "[$minor]" 
                 echo "[$patch]"
                 newpatch=$(expr "$patch" + 1)
