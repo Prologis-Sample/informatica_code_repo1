@@ -28,7 +28,7 @@ stages:
                 major=`echo $version | cut -d "." -f1`
                 minor=`echo $version | cut -d "." -f2`
                 patch=`echo $version | cut -d "." -f3`
-                newpatch=$(expr "$patch" + 1)
+                newpatch=$(expr $patch + 1)
                 newversion=`echo $major.$minor.$newpatch` 
                 echo $version $newversion
                 sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
