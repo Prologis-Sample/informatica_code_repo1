@@ -30,6 +30,9 @@ stages:
                 minor=`echo $version | cut -d "." -f2`
                 patch=`echo $version | cut -d "." -f3`
                 echo $major $minor $patch
+                if [[ $patch =~ ^[+-]?[0-9]+$ ]]; then
+                   echo "Input is an integer."
+                fi
                 newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
                 echo $version  $newversion
