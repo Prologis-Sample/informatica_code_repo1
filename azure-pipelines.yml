@@ -32,6 +32,7 @@ stages:
                 echo "[$patch]"
                 newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
+                echo "[$newversion]"
                 echo $version $newversion
                 sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
                 cat $(jobfile)
@@ -62,11 +63,11 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                echo $(version)
-                echo $(jobName)
-                #sed "s/$version/$newversion/g" latest.txt >latest1.txt
+                version=1.0.49
+                newversion=1.0.50
+                sed "s/$version/$newversion/g" $(jobfile) >latest1.txt
                 #cat latest.txt
-                #cat latest1.txt
+                cat latest1.txt
 
   - stage: ExportFromDev
     displayName: Export the source file from dev
