@@ -65,8 +65,8 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                echo $version
-                echo $jobName
+                echo $(version)
+                echo $(jobName)
                 #sed "s/$version/$newversion/g" latest.txt >latest1.txt
                 #cat latest.txt
                 #cat latest1.txt
