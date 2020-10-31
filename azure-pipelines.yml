@@ -23,20 +23,20 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                jobName=`cat job_file.txt | grep "Job Name" | cut -d ":" -f2 | sed 's/"//g'`
-                version=`cat job_file.txt |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'`
+                jobName=`cat $(jobfile)| grep "Job Name" | cut -d ":" -f2 | sed 's/"//g'`
+                version=`cat $(jobfile) |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed 's/ //g'`
                 echo $version
                 major=`echo $version | cut -d "." -f1`
                 minor=`echo $version | cut -d "." -f2`
                 patch=`echo $version | cut -d "." -f3`
                 echo $major $minor $patch
-                newpatch=$(expr "$minor" + 1)
+                newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
                 echo $version  $newversion
-                sed "s/$version/$newversion/g" job_file.txt >newfile.txt                     
-                cat job_file.txt
+                sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
+                cat $(jobfile)
                 cat newfile.txt
-                mv newfile.txt job_file.txt
+                mv newfile.txt $(jobfile)
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
