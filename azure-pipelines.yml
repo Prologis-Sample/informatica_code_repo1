@@ -24,7 +24,7 @@ stages:
               targetType: 'inline'
               script: |
                 jobName=`cat $(jobfile) | grep "Job Name" | cut -d ":" -f2 | sed 's/"//g'`
-                version=`cat $(jobfile) |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'`
+                version=`cat latest.txt |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'`
                 major=`echo $version | cut -d "." -f1`
                 minor=`echo $version | cut -d "." -f2`
                 patch=`echo $version | cut -d "." -f3`
