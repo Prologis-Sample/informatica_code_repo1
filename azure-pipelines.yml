@@ -35,6 +35,7 @@ stages:
                 cat $(jobfile)
                 cat newfile.txt
                 mv newfile.txt $(jobfile)
+                echo "##vso[task.setvariable variable=jobversion;isOutput=true]$version"
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
@@ -58,7 +59,7 @@ stages:
       - job: devtest
         displayName: sample test
         variables:
-          buildversion:  $[ stageDependencies.Version.Versioning.outputs['versionScript.version'] ]
+          buildversion:  $[ stageDependencies.Version.Versioning.outputs['versionScript.jobversion'] ]
         steps:
           - task: Bash@3
             inputs:
