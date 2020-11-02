@@ -72,7 +72,7 @@ stages:
                 #sed "s/$version/$newversion/g" $(jobfile) >latest1.txt
                 #cat latest.txt
                 #cat latest1.txt
-                buildversion=`cat $(Pipeline.Workspace)/variables/fileversion)`
+                buildversion=`cat $(Pipeline.Workspace)/variables/fileversion`
                 echo $buildversion
 
   - stage: ExportFromDev
