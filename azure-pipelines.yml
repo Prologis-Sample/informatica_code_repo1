@@ -37,7 +37,6 @@ stages:
                 cat $(jobfile)
                 cat newfile.txt
                 mv newfile.txt $(jobfile)
-                echo "##vso[task.setvariable variable=jobversion;isOutput=true]$version"
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
@@ -73,8 +72,8 @@ stages:
                 #sed "s/$version/$newversion/g" $(jobfile) >latest1.txt
                 #cat latest.txt
                 #cat latest1.txt
-                buildversion=$(cat $(Pipeline.Workspace)/variables/fileversion)
-                echo $(buildversion) 
+                buildversion=`cat $(Pipeline.Workspace)/variables/fileversion)`
+                echo $buildversion
 
   - stage: ExportFromDev
     displayName: Export the source file from dev
