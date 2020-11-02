@@ -30,6 +30,8 @@ stages:
                 patch=`echo $version | cut -d "." -f3`
                 newpatch=$(expr "$patch" + 1)
                 newversion=`echo $major.$minor.$newpatch` 
+                mkdir -p $(Pipeline.Workspace)/variables
+                echo "$version" > $(Pipeline.Workspace)/variables/fileversion
                 echo "[$newversion]"
                 sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
                 cat $(jobfile)
@@ -39,13 +41,14 @@ stages:
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
-                git add *
+                git add $(jobfile)
                 git status
                 git commit -m "version $newversion"
                 git push origin HEAD:main
                 echo "Execute Completed"
               name: versionScript  
-                
+          - publish: $(Pipeline.Workspace)/variables 
+            artifact: variables    
           
           
 
@@ -58,9 +61,9 @@ stages:
     jobs:
       - job: devtest
         displayName: sample test
-        variables:
-          buildversion:  $[ stageDependencies.Version.Versioning.outputs['versionScript.jobversion'] ]
         steps:
+          - download: current
+            artifact: variables
           - task: Bash@3
             inputs:
               targetType: 'inline'
@@ -70,6 +73,7 @@ stages:
                 #sed "s/$version/$newversion/g" $(jobfile) >latest1.txt
                 #cat latest.txt
                 #cat latest1.txt
+                buildversion=$(cat $(Pipeline.Workspace)/variables/fileversion)
                 echo $(buildversion) 
 
   - stage: ExportFromDev
