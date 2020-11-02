@@ -58,7 +58,7 @@ stages:
       - job: devtest
         displayName: sample test
         variables:
-          buildversion:  $[stageDependencies.Version.Versioning.outputs['versionScript.version']]
+          buildversion:  $[ stageDependencies.Version.Versioning.outputs['versionScript.version'] ]
         steps:
           - task: Bash@3
             inputs:
@@ -69,7 +69,7 @@ stages:
                 #sed "s/$version/$newversion/g" $(jobfile) >latest1.txt
                 #cat latest.txt
                 #cat latest1.txt
-                echo " $(buildversion) "
+                echo $(buildversion) 
 
   - stage: ExportFromDev
     displayName: Export the source file from dev
