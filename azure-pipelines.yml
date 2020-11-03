@@ -88,6 +88,9 @@ stages:
                # Write your commands here
       
                 git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
+                pwd
+                cd $(Agent.TempDirectory)
+                pwd
         
           
   - stage: UploadArtifact
