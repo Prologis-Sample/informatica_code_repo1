@@ -85,7 +85,7 @@ stages:
           inputs:
             sshEndpoint: 'devVm'
             runOptions: 'inline'
-            inline: '$(Agent.HomeDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Default/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_employee.zip'''''''
+            inline: '$(Agent.HomeDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Default/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_employee.zip'
             readyTimeout: '20000'
         
           
