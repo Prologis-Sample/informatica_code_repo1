@@ -87,7 +87,7 @@ stages:
              script: |
                # Write your commands here
       
-                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools/tree/master/IICS%20Asset%20Management%20CLI/v2
+                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
         
           
   - stage: UploadArtifact
