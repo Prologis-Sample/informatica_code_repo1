@@ -81,12 +81,13 @@ stages:
       - job: exportartifact
         displayName: export from dev
         steps:
-        - task: SSH@0
+        - task: Bash@3
           inputs:
-            sshEndpoint: 'devVm'
-            runOptions: 'inline'
-            inline: '$(Agent.HomeDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Default/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_employee.zip'
-            readyTimeout: '20000'
+             targetType: 'inline'
+              script: |
+               # Write your commands here
+      
+                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools/tree/master/IICS%20Asset%20Management%20CLI/v2
         
           
   - stage: UploadArtifact
