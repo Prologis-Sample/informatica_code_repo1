@@ -88,11 +88,9 @@ stages:
                # Write your commands here
       
                 git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
-                pwd
+                cd $(System.DefaultWorkingDirectory)/IICS Asset Management CLI/v2/linux-x86_64
                 ls
-                cd $(Agent.TempDirectory)
-                pwd
-                ls
+                iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Default/home/prologis-demodev/infaagent/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow_1.zip
         
           
   - stage: UploadArtifact
