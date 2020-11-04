@@ -16,6 +16,9 @@ stages:
       - job: FirstRun
         displayName: Need to run once
         steps:
+          - checkout: self
+            submodules: true
+            persistCredentials: true 
           - task: Bash@3
             inputs:
               targetType: 'inline'
