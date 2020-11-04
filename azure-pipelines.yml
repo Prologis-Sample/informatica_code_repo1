@@ -25,6 +25,8 @@ stages:
                 $(System.DefaultWorkingDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow.zip
                 mv tf_sample_Task_Flow.zip tf_sample_Task_Flow_1.0.0.zip
                 cd ..
+                git config --global user.email "jenithangel@gmail.com"
+                git config --global user.name "angeljenitha"
                 git add SourceFiles
                 git status
                 git commit -m "Initial Source file upload"
