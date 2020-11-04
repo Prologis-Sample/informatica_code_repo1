@@ -35,6 +35,8 @@ stages:
                 git config --global user.name "angeljenitha"
                 git add SourceFiles
                 git status
+                git fetch origin
+                git diff HEAD..origin/master
                 git commit -m "Initial Source file upload"
                 git push origin HEAD:main
 
