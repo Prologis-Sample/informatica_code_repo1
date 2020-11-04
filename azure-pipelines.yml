@@ -104,8 +104,8 @@ stages:
         steps:
          - download: 
            artifact: variables
-        - task: Bash@3
-          inputs:
+         - task: Bash@3
+           inputs:
              targetType: 'inline'
              script: |
                # Write your commands here
