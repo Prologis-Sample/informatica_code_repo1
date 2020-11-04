@@ -105,10 +105,10 @@ stages:
       - job: exportartifact
         displayName: export from dev
         steps:
-         - checkout: 
+         - checkout: self
            submodules: true
            persistCredentials: true 
-           
+
          - download: current
            artifact: variables
         
