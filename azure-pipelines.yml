@@ -112,8 +112,7 @@ stages:
       - job: ApproveQA
         displayName: approve the QA import
         steps:
-          - download: current
-            artifact : variables
+
           - task: SSH@0
             inputs:
               sshEndpoint: 'sshqa'
@@ -122,16 +121,16 @@ stages:
                 version=$(deployversion)
                 if [ $version -eq 0 ]
                 then
-                    version=`cat $(Pipeline.Workspace)/variables/newfileversion`
-                    filename=tf_sample_Task_Flow_1_$version.zip
+                    version=`cat $(jobfile)  |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed -e 's/\r//g'|sed -e 's/ //g'`
+                    filename=$(jobName)_$version.zip
                 else
-                    filename=tf_sample_Task_Flow_1_$version.zip
+                    filename=$(jobName)_$version.zip
                 fi
                 echo $filename $version
-                ls -ltr $(System.DefaultWorkingDirectory)/SourceFiles/$filename
-                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
-                cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
-                chmod +x iics
+                #ls -ltr $(System.DefaultWorkingDirectory)/SourceFiles/$filename
+                #git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
+                #cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
+                #chmod +x iics
                  $(System.DefaultWorkingDirectory)/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(System.DefaultWorkingDirectory)/SourceFiles/$filename
               readyTimeout: '20000'
     
@@ -151,8 +150,10 @@ stages:
               targetType: 'inline'
               script: |
                 version=$(deployversion)
+                git clone $(projectRepo)
                 if [ $version -eq 0 ]
                 then
+                  cd $(projectName)
                   version=`cat $(Pipeline.Workspace)/variables/newfileversion`
                   filename=tf_sample_Task_Flow_1_$version.zip
                 else
