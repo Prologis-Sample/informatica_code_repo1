@@ -127,7 +127,9 @@ stages:
                 mv tf_sample_Task_Flow_1.zip $(System.DefaultWorkingDirectory)/SourceFiles/$newfile
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
-                git add SourceFiles/$newfile
+                cd SourceFiles
+                pwd
+                git add $newfile
                 git status
                 git commit -m "Adding the latest source file $newfile"
                 git push origin HEAD:main
