@@ -38,9 +38,6 @@ stages:
                 git commit -m "Initial Source file upload"
                 git push origin HEAD:main
 
-              
-
-
   - stage: Version
     displayName: Read and generate job versions
     jobs:
@@ -63,6 +60,7 @@ stages:
                 newversion=`echo $major.$minor.$newpatch` 
                 mkdir -p $(Pipeline.Workspace)/variables
                 echo "$version" > $(Pipeline.Workspace)/variables/fileversion
+                echo "$newversion" > $(Pipeline.Workspace)/variables/newfileversion
                 echo "[$newversion]"
                 sed "s/$version/$newversion/g" $(jobfile) >newfile.txt                     
                 cat $(jobfile)
@@ -79,15 +77,10 @@ stages:
               name: versionScript  
           - publish: $(Pipeline.Workspace)/variables 
             artifact: variables    
-          
-          
-
-
 
   - stage: DevUnitTest
     displayName: Simple Unit test case run
     dependsOn: Version
-          
     jobs:
       - job: devtest
         displayName: sample test
@@ -112,7 +105,13 @@ stages:
       - job: exportartifact
         displayName: export from dev
         steps:
-         
+         - checkout: 
+           submodules: true
+           persistCredentials: true 
+           
+         - download: current
+           artifact: variables
+        
          - task: Bash@3
            inputs:
              targetType: 'inline'
@@ -122,10 +121,14 @@ stages:
                 git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
                 cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
                 chmod +x iics
-                $(System.DefaultWorkingDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow.zip
+                $(System.DefaultWorkingDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow_1.zip
+                newbuildversion=`cat $(Pipeline.Workspace)/variables/newfileversion`
+                newfile=tf_sample_Task_Flow_1_$newbuildversion.zip
+                mv tf_sample_Task_Flow_1.zip $(System.DefaultWorkingDirectory)/SourceFiles/$newfile
+                git config --global user.email "jenithangel@gmail.com"
+                git config --global user.name "angeljenitha"
+                git add SourceFiles/$newfile
+                git status
+                git commit -m "Adding the latest source file $newfile"
 
-        
-          
-  - stage: UploadArtifact
-    displayName: Upload the artifact with version to git repo
-  
+
