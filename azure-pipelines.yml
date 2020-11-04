@@ -120,7 +120,7 @@ stages:
                 git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
                 cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
                 chmod +x iics
-                $(System.DefaultWorkingDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow_1.zip
+                $(System.DefaultWorkingDirectory)/iics export --region ap --username $(devuser) --password $(devpass) --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow_1.zip
                 newbuildversion=`cat $(Pipeline.Workspace)/variables/newfileversion`
                 newfile=tf_sample_Task_Flow_1_$newbuildversion.zip
                 mv tf_sample_Task_Flow_1.zip $(System.DefaultWorkingDirectory)/SourceFiles/$newfile
@@ -135,4 +135,37 @@ stages:
                 git pull  . origin/master
                 git push origin HEAD:main
                 echo "Success commit "
+  - stage: Import to QA
+    DisplayName: Import the source file to QA
+    dependsOn: ExportFromDev
+    jobs:
+      - job: ImporttoQA
+        displayName: Import the job to QA
+        steps:
+          - download: current
+            artifact : variables
+          
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                version=$(deployversion)
+                if [ $version -eq 0 ]
+                then
+                  version=`cat $(Pipeline.Workspace)/variables/newfileversion`
+                  filename = tf_sample_Task_Flow1$version.zip
+                else
+                   filename = tf_sample_Task_Flow1$version.zip
+                fi
+                echo $filename $version
+                ls -ltr $(System.DefaultWorkingDirectory)/SourceFiles/$filename
+                #git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
+                #cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
+                #chmod +x iics
+                #$(System.DefaultWorkingDirectory)/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(System.DefaultWorkingDirectory)/SourceFiles/$filename
+        
+
+
+      
+
 
