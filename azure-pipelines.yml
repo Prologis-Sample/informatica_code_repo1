@@ -106,45 +106,13 @@ stages:
                 buildversion=`cat $(Pipeline.Workspace)/variables/fileversion`
                 echo $buildversion
 
-  - stage: ExportFromDev
+  - stage: ApprovalforQA
     displayName: Export the source file from dev
-    jobs:
-      - job: exportartifact
-        displayName: export from dev
-        steps:
-         - checkout: none
-           persistCredentials: true 
-
-         - download: current
-           artifact: variables
-        
-         - task: Bash@3
-           inputs:
-             targetType: 'inline'
-             script: |
-               # Write your commands here
-      
-                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
-                cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
-                chmod +x iics
-                $(System.DefaultWorkingDirectory)/iics export --region ap --username $(devuser) --password $(devpass) --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow_1.zip
-                newbuildversion=`cat $(Pipeline.Workspace)/variables/newfileversion`
-                newfile=tf_sample_Task_Flow_1_$newbuildversion.zip
-                mv tf_sample_Task_Flow_1.zip $(System.DefaultWorkingDirectory)/SourceFiles/$newfile
-                git config --global user.email "jenithangel@gmail.com"
-                git config --global user.name "angeljenitha"
-                git config pull.rebase false
-                cd SourceFiles
-                pwd
-                git add $newfile
-                git status
-                git commit -m "Adding the latest source file $newfile"
-                git pull  . origin/master
-                git push origin HEAD:main
-                echo "Success commit "
+    
+    
   - stage: ImportToQA
     displayName: Import the source file to QA
-    dependsOn: ExportFromDev
+    dependsOn: Version
     jobs:
       - job: ImporttoQA
         displayName: Import the job to QA
@@ -166,10 +134,10 @@ stages:
                 fi
                 echo $filename $version
                 ls -ltr $(System.DefaultWorkingDirectory)/SourceFiles/$filename
-                #git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
-                #cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
-                #chmod +x iics
-                #$(System.DefaultWorkingDirectory)/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(System.DefaultWorkingDirectory)/SourceFiles/$filename
+                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
+                cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
+                chmod +x iics
+                $(System.DefaultWorkingDirectory)/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(System.DefaultWorkingDirectory)/SourceFiles/$filename
         
 
 
