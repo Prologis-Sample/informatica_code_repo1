@@ -119,8 +119,10 @@ stages:
               runOptions: 'inline'
               inline: |
                 version=$(deployversion)
+                git clone $(projectRepo)
                 if [ $version -eq 0 ]
                 then
+                    cd $(projectName)
                     version=`cat $(jobfile)  |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed -e 's/\r//g'|sed -e 's/ //g'`
                     filename=$(jobName)_$version.zip
                 else
