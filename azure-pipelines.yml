@@ -136,7 +136,7 @@ stages:
                 git push origin HEAD:main
                 echo "Success commit "
   - stage: Import to QA
-    DisplayName: Import the source file to QA
+    displayName: Import the source file to QA
     dependsOn: ExportFromDev
     jobs:
       - job: ImporttoQA
