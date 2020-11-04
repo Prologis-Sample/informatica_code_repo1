@@ -16,8 +16,7 @@ stages:
       - job: FirstRun
         displayName: Need to run once
         steps:
-          - checkout: self
-            submodules: true
+          - checkout: self            
             persistCredentials: true 
           - task: Bash@3
             inputs:
@@ -47,7 +46,6 @@ stages:
         displayName: Read job file and create next version
         steps:
           - checkout: self
-            submodules: true
             persistCredentials: true 
           - task: Bash@3
             inputs:
@@ -108,7 +106,6 @@ stages:
         displayName: export from dev
         steps:
          - checkout: self
-           submodules: true
            persistCredentials: true 
 
          - download: current
