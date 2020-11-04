@@ -130,7 +130,7 @@ stages:
                   version=`cat $(Pipeline.Workspace)/variables/newfileversion`
                   filename=tf_sample_Task_Flow_1_$version.zip
                 else
-                   filename=tf_sample_Task_Flow1$version.zip
+                  filename=tf_sample_Task_Flow_1_$version.zip
                 fi
                 echo $filename $version
                 ls -ltr $(System.DefaultWorkingDirectory)/SourceFiles/$filename
