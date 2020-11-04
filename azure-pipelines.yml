@@ -66,10 +66,17 @@ stages:
                 cat $(jobfile)
                 cat newfile.txt
                 mv newfile.txt $(jobfile)
+                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
+                cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
+                chmod +x iics
+                $(System.DefaultWorkingDirectory)/iics export --region ap --username $(devuser) --password $(devpass) --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow_1.zip
+                newfile=tf_sample_Task_Flow_1_$newversion.zip
+                mv tf_sample_Task_Flow_1.zip $(System.DefaultWorkingDirectory)/SourceFiles/$newfile
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
                 git add $(jobfile)
+                git add SourceFiles/$newfile
                 git status
                 git commit -m "version $newversion"
                 git push origin HEAD:main
