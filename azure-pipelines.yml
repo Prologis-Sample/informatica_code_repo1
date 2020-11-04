@@ -102,8 +102,7 @@ stages:
       - job: exportartifact
         displayName: export from dev
         steps:
-         - download: 
-           artifact: variables
+         
          - task: Bash@3
            inputs:
              targetType: 'inline'
