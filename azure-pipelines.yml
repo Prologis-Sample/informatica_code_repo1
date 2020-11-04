@@ -10,6 +10,27 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
+  - stage: OneTimeRun
+    displayName: First time run 
+    jobs:
+      - job: FirstRun
+        displayName: Need to run once
+        steps:
+          -  script: |
+                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
+                cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
+                chmod +x iics
+                mkdir SourceFiles
+                cd SourceFiles
+                $(System.DefaultWorkingDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow.zip
+                mv tf_sample_Task_Flow.zip tf_sample_Task_Flow_1.0.0.zip
+                cd ..
+                git add SourceFiles
+                git status
+                git commit -m "Initial Source file upload"
+                git push origin HEAD:main
+
+
   - stage: Version
     displayName: Read and generate job versions
     jobs:
@@ -81,6 +102,8 @@ stages:
       - job: exportartifact
         displayName: export from dev
         steps:
+         - download: 
+           artifact: variables
         - task: Bash@3
           inputs:
              targetType: 'inline'
@@ -90,7 +113,8 @@ stages:
                 git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
                 cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
                 chmod +x iics
-                $(System.DefaultWorkingDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow_1.zip
+                $(System.DefaultWorkingDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow.zip
+
         
           
   - stage: UploadArtifact
