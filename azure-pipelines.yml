@@ -16,7 +16,10 @@ stages:
       - job: FirstRun
         displayName: Need to run once
         steps:
-          -  script: |
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
                 git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
                 cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
                 chmod +x iics
@@ -31,6 +34,8 @@ stages:
                 git status
                 git commit -m "Initial Source file upload"
                 git push origin HEAD:main
+
+              
 
 
   - stage: Version
