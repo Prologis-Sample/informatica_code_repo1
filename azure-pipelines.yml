@@ -105,7 +105,7 @@ stages:
       - job: exportartifact
         displayName: export from dev
         steps:
-         - checkout: self
+         - checkout: none
            persistCredentials: true 
 
          - download: current
