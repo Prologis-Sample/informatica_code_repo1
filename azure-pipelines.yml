@@ -130,5 +130,6 @@ stages:
                 git add SourceFiles/$newfile
                 git status
                 git commit -m "Adding the latest source file $newfile"
-
+                git push origin HEAD:main
+                echo "Success commit "
 
