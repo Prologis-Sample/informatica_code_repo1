@@ -132,8 +132,6 @@ stages:
                 git add $newfile
                 git status
                 git commit -m "Adding the latest source file $newfile"
-                git fetch origin
-                git diff HEAD..origin/master
                 git push origin HEAD:main
                 echo "Success commit "
 
