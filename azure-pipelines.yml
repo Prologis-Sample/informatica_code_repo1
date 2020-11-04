@@ -119,21 +119,26 @@ stages:
               runOptions: 'inline'
               inline: |
                 version=$(deployversion)
+                if [ -d "Tools" ]; then
+                    rm -rf Tools
+                fi
+                if [ -d "$(projectName)" ]; then
+                   rm -rf $(projectName)
+                fi   
                 git clone $(projectRepo)
                 if [ $version -eq 0 ]
                 then
-                    cd $(projectName)
-                    version=`cat $(jobfile)  |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed -e 's/\r//g'|sed -e 's/ //g'`
+                    #cd $(projectName)
+                    version=`cat $(projectName)/$(jobfile)  |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed -e 's/\r//g'|sed -e 's/ //g'`
                     filename=$(jobName)_$version.zip
                 else
                     filename=$(jobName)_$version.zip
                 fi
                 echo $filename $version
-                #ls -ltr $(System.DefaultWorkingDirectory)/SourceFiles/$filename
-                #git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
-                #cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
-                #chmod +x iics
-                 $(System.DefaultWorkingDirectory)/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(System.DefaultWorkingDirectory)/SourceFiles/$filename
+                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
+                cp Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics .
+                chmod +x iics
+                iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(projectName)/SourceFiles/$filename
               readyTimeout: '20000'
     
     
