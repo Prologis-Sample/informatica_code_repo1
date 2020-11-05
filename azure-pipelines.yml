@@ -118,6 +118,7 @@ stages:
             inputs:
               sshEndpoint: 'sshqa'
               runOptions: 'inline'
+              failOnStdErr: false
               inline: |
                 version=$(deployversion)
                 git config --global user.email "jenithangel@gmail.com"
