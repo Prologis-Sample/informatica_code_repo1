@@ -108,7 +108,7 @@ stages:
 
   - stage: ApprovalforQA
     displayName: Import the source file to QA
-    dependsOn: DevUnitTest
+   # dependsOn: DevUnitTest
     jobs:
       - job: ApproveQA
         displayName: approve the QA import
@@ -120,6 +120,8 @@ stages:
               runOptions: 'inline'
               inline: |
                 version=$(deployversion)
+                git config --global user.email "jenithangel@gmail.com"
+                git config --global user.name "angeljenitha"
                 if [ -d "Tools" ]; then
                     rm -rf Tools
                 fi
