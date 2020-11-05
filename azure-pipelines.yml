@@ -27,8 +27,8 @@ stages:
                 chmod +x iics
                 mkdir SourceFiles
                 cd SourceFiles
-                $(System.DefaultWorkingDirectory)/iics export --region ap --username iicsdemodevelopment@gmail.com --password Iicsdemo@123 --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow.zip
-                mv tf_sample_Task_Flow.zip tf_sample_Task_Flow_1.0.0.zip
+                $(System.DefaultWorkingDirectory)/iics export --region ap --username $(devuser) --password $(devpass) --artifacts Explore/Project_Folder_1/$(jobName).WORKFLOW --zipFilePath $(jobName).zip
+                mv $(jobName).zip $(jobName)_1.0.0.zip
                 cd ..
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
@@ -69,9 +69,9 @@ stages:
                 git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
                 cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
                 chmod +x iics
-                $(System.DefaultWorkingDirectory)/iics export --region ap --username $(devuser) --password $(devpass) --artifacts Explore/Project_Folder_1/tf_sample_Task_Flow_1.WORKFLOW --zipFilePath tf_sample_Task_Flow_1.zip
+                $(System.DefaultWorkingDirectory)/iics export --region ap --username $(devuser) --password $(devpass) --artifacts Explore/Project_Folder_1/$(jobName).WORKFLOW --zipFilePath $(jobName).zip
                 newfile=tf_sample_Task_Flow_1_$newversion.zip
-                mv tf_sample_Task_Flow_1.zip $(System.DefaultWorkingDirectory)/SourceFiles/$newfile
+                mv $(jobName).zip $(System.DefaultWorkingDirectory)/SourceFiles/$newfile
                 echo "Setting git config..."
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
@@ -98,16 +98,17 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                #version=1.0.49
-                #newversion=1.0.50
-                #sed "s/$version/$newversion/g" $(jobfile) >latest1.txt
-                #cat latest.txt
-                #cat latest1.txt
                 buildversion=`cat $(Pipeline.Workspace)/variables/fileversion`
                 echo $buildversion
+                if [ -f /SourceFiles/$(jobName)_$buildversion.zip ]; then
+                   echo " source file exist in git repo $(projectRepo) ..\n Test Success"
+                else
+                   echo "Test Failure. "
+                fi
 
   - stage: ApprovalforQA
-    displayName: Export the source file from dev
+    displayName: Import the source file to QA
+    dependsOn: DevUnitTest
     jobs:
       - job: ApproveQA
         displayName: approve the QA import
@@ -128,7 +129,6 @@ stages:
                 git clone $(projectRepo)
                 if [ $version -eq 0 ]
                 then
-                    #cd $(projectName)
                     version=`cat $(projectName)/$(jobfile)  |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed -e 's/\r//g'|sed -e 's/ //g'`
                     filename=$(jobName)_$version.zip
                 else
@@ -143,38 +143,7 @@ stages:
               readyTimeout: '20000'
     
     
-  - stage: ImportToQA
-    displayName: Import the source file to QA
-    dependsOn: Version
-    jobs:
-      - job: ImporttoQA
-        displayName: Import the job to QA
-        steps:
-          - download: current
-            artifact : variables
-          
-          - task: Bash@3
-            inputs:
-              targetType: 'inline'
-              script: |
-                version=$(deployversion)
-                git clone $(projectRepo)
-                if [ $version -eq 0 ]
-                then
-                  cd $(projectName)
-                  version=`cat $(Pipeline.Workspace)/variables/newfileversion`
-                  filename=tf_sample_Task_Flow_1_$version.zip
-                else
-                  filename=tf_sample_Task_Flow_1_$version.zip
-                fi
-                echo $filename $version
-                ls -ltr $(System.DefaultWorkingDirectory)/SourceFiles/$filename
-                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
-                cp $(System.DefaultWorkingDirectory)/Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics $(System.DefaultWorkingDirectory)
-                chmod +x iics
-                $(System.DefaultWorkingDirectory)/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(System.DefaultWorkingDirectory)/SourceFiles/$filename
-        
-
+  
 
       
 
