@@ -118,13 +118,15 @@ stages:
             inputs:
               sshEndpoint: 'sshqa'
               runOptions: 'inline'
-              failOnStdErr: false
+              #failOnStdErr: false
               inline: |
                 version=$(deployversion)
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
-                if [ -d "Tools" ]; then
-                    rm -rf Tools
+                if ! [ -d "Tools" ]; then
+                    git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git >> log.txt   2>&1
+                    cp Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics .
+                    chmod +x iics
                 fi
                 if [ -d "$(projectName)" ]; then
                    rm -rf $(projectName)
@@ -139,11 +141,9 @@ stages:
                     filename=$(jobName)_$version.zip
                 fi
                 echo $filename $version
-                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git >> log.txt
-                cp Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics .
-                chmod +x iics
+                
                 currdir=`pwd`
-                $currdir/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(projectName)/SourceFiles/$filename
+                $currdir/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(projectName)/SourceFiles/$filename >> log.txt   2>&1
               readyTimeout: '20000'
     
     
