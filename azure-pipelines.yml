@@ -129,7 +129,7 @@ stages:
                 if [ -d "$(projectName)" ]; then
                    rm -rf $(projectName)
                 fi   
-                git clone $(projectRepo) > log.txt
+                git clone $(projectRepo) > log.txt  2>&1
                 echo $?
                 if [ $version -eq 0 ]
                 then
