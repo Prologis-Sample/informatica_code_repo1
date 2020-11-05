@@ -128,7 +128,7 @@ stages:
                 if [ -d "$(projectName)" ]; then
                    rm -rf $(projectName)
                 fi   
-                git clone $(projectRepo)
+                git clone $(projectRepo) > log.txt
                 echo $?
                 if [ $version -eq 0 ]
                 then
@@ -138,7 +138,7 @@ stages:
                     filename=$(jobName)_$version.zip
                 fi
                 echo $filename $version
-                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git
+                git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git >> log.txt
                 cp Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics .
                 chmod +x iics
                 currdir=`pwd`
