@@ -148,7 +148,7 @@ stages:
 
   - stage: SpecificVersiontoQA
     displayName: Import the specific source file to QA
-    condition: ne('$(deployversion)', '0')
+    condition: and(succeeded(), ne(variables[$(deployversion)], '0'))
     jobs:
       - job: ImportSpecificFile
         displayName: approve the QA  import of specific version
