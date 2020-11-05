@@ -129,6 +129,7 @@ stages:
                    rm -rf $(projectName)
                 fi   
                 git clone $(projectRepo)
+                echo $?
                 if [ $version -eq 0 ]
                 then
                     version=`cat $(projectName)/$(jobfile)  |cut -d "," -f2| grep "Version" | cut -d ":" -f2 |sed 's/"//g'|sed -e 's/\r//g'|sed -e 's/ //g'`
