@@ -152,7 +152,7 @@ stages:
     jobs:
       - job: ImportSpecificFile
         displayName: approve the QA  import of specific version
-        condition: and(succeeded(), ne(variables[$(deployversion)], '0'))
+        condition:  ne(variables[$(deployversion)], '0')
         steps:
 
           - task: SSH@0
