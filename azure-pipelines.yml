@@ -106,12 +106,12 @@ stages:
                    echo "Test Failure. "
                 fi
 
-  - stage: ApprovalforQA
+  - stage: LatestVersiontoQA
     displayName: Import the source file to QA
    # dependsOn: DevUnitTest
     jobs:
-      - job: ApproveQA
-        displayName: approve the QA import
+      - job: ImportLatestFile
+        displayName: approve the QA latset import
         steps:
 
           - task: SSH@0
@@ -140,6 +140,40 @@ stages:
                 else
                     filename=$(jobName)_$version.zip
                 fi
+                echo $filename $version
+                
+                currdir=`pwd`
+                $currdir/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(projectName)/SourceFiles/$filename 1 >> log.txt   2> err.txt
+              readyTimeout: '20000'
+
+  - stage: SpecificVersiontoQA
+    displayName: Import the specific source file to QA
+    condition: ne('$(deployversion)', '0')
+    jobs:
+      - job: ImportSpecificFile
+        displayName: approve the QA  import of specific version
+        steps:
+
+          - task: SSH@0
+            inputs:
+              sshEndpoint: 'sshqa'
+              runOptions: 'inline'
+              
+              #failOnStdErr: false
+              inline: |
+                version=$(deployversion)
+                git config --global user.email "jenithangel@gmail.com"
+                git config --global user.name "angeljenitha"
+                if ! [ -d "Tools" ]; then
+                    git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git >> log.txt   2>&1
+                    cp Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics .
+                    chmod +x iics
+                fi
+                if [ -d "$(projectName)" ]; then
+                   rm -rf $(projectName)
+                fi   
+                git clone $(projectRepo) > log.txt  2>&1
+                filename=$(jobName)_$version.zip
                 echo $filename $version
                 
                 currdir=`pwd`
