@@ -154,10 +154,11 @@ stages:
     jobs:
       - job: ImportSpecificFile
         displayName: approve the QA  import of specific version
-        condition:  ne('${{ variables.cutomeversion }}', '0')
+        
         steps:
 
           - task: SSH@0
+            condition: ne('${{ variables.cutomeversion }}', '0')
             inputs:
               sshEndpoint: 'sshqa'
               runOptions: 'inline'
