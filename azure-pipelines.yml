@@ -41,7 +41,7 @@ stages:
 
   - stage: Version
     displayName: Read and generate job versions
-    dependsOn: none
+    
     jobs:
       - job: Versioning
         displayName: Read job file and create next version
