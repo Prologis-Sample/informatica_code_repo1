@@ -103,14 +103,16 @@ stages:
                 echo $buildversion
                 ls -ltr
                 if [ -f SourceFiles/$(jobName)_$buildversion.zip ]; then
-                   echo " source file exist in git repo $(projectRepo) ..\n Test Success"
+                   echo "Source file exist in git repo $(projectRepo) ..\n Test Success"
                 else
-                   echo "Test Failure. "
+                   echo "Test Failure. Latest source file doesnt exist in the repo  $(projectRepo) "
+                   exit 1
                 fi
 
   - stage: LatestVersiontoQA
     displayName: Import the source file to QA
-   # dependsOn: DevUnitTest
+    dependsOn: DevUnitTest
+    condition: succeeded('DevUnitTest')
     jobs:
       - job: ImportLatestFile
         displayName: approve the QA latset import
@@ -169,9 +171,10 @@ stages:
                 if [ -d "$(projectName)" ]; then
                    rm -rf $(projectName)
                 fi   
+                currdir=`pwd`
                 git clone $(projectRepo) > log.txt  2>&1
                 filename=$(jobName)_$(deployversion).zip
-                if [ -f $(projectName)/SourceFiles/$filename ]
+                if [ -f $currdir/$(projectName)/SourceFiles/$filename ]
                 then 
                    echo "$filename Proceeding to import " >> log.txt  2>&1
                 else
@@ -186,7 +189,7 @@ stages:
                 
                 echo $filename $version
                 
-                currdir=`pwd`
+                
                 $currdir/iics import --region ap --username $(qauser) --password $(qapass) --zipFilePath $(projectName)/SourceFiles/$filename 1 >> log.txt   2> err.txt
               readyTimeout: '20000'
     
