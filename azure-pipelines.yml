@@ -152,8 +152,7 @@ stages:
     jobs:
       - job: ImportSpecificFile
         displayName: approve the QA  import of specific version
-        condition: and(succeeded(), ne(variables['deployversion'], '0'))
-        
+              
         steps:
 
           - task: SSH@0
@@ -163,19 +162,26 @@ stages:
               
               #failOnStdErr: false
               inline: |
-                version=$(deployversion)
+                
                 git config --global user.email "jenithangel@gmail.com"
                 git config --global user.name "angeljenitha"
+                if [ -d "$(projectName)" ]; then
+                   rm -rf $(projectName)
+                fi   
+                git clone $(projectRepo) > log.txt  2>&1
+                filename=$(jobName)_$(deployversion).zip
+                if [ -f SourceFiles/$filename ]; then 
+                   echo "$filename Proceeding to import .
+                else
+                  echo "$filename doesnt exist. Please check the version"
+                  exit 1
+                fi
                 if ! [ -d "Tools" ]; then
                     git clone https://github.com/InformaticaCloudApplicationIntegration/Tools.git >> log.txt   2>&1
                     cp Tools/'IICS Asset Management CLI'/v2/linux-x86_64/iics .
                     chmod +x iics
                 fi
-                if [ -d "$(projectName)" ]; then
-                   rm -rf $(projectName)
-                fi   
-                git clone $(projectRepo) > log.txt  2>&1
-                filename=$(jobName)_$version.zip
+                
                 echo $filename $version
                 
                 currdir=`pwd`
