@@ -148,12 +148,10 @@ stages:
 
   - stage: SpecificVersiontoQA
     displayName: Import the specific source file to QA
-    variables:
-     - name: cutomeversion
-       value: $(deployversion)
     jobs:
       - job: ImportSpecificFile
         displayName: approve the QA  import of specific version
+        condition: and(succeeded(), ne(variables['deployversion'], '0'))
         
         steps:
 
