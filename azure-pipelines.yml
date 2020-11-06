@@ -169,9 +169,9 @@ stages:
                 fi   
                 git clone $(projectRepo) > log.txt  2>&1
                 filename=$(jobName)_$(deployversion).zip
-                if [ -f SourceFiles/$filename ]
+                if [ -f $(projectName)/SourceFiles/$filename ]
                 then 
-                   echo "$filename Proceeding to import "
+                   echo "$filename Proceeding to import " >> log.txt  2>&1
                 else
                   echo "$filename doesnt exist. Please check the version"
                   exit 1
