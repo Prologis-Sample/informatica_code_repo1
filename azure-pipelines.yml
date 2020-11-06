@@ -101,6 +101,7 @@ stages:
               script: |
                 buildversion=`cat $(Pipeline.Workspace)/variables/fileversion`
                 echo $buildversion
+                ls -ltr
                 if [ -f /SourceFiles/$(jobName)_$buildversion.zip ]; then
                    echo " source file exist in git repo $(projectRepo) ..\n Test Success"
                 else
