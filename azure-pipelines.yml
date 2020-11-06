@@ -160,7 +160,6 @@ stages:
               sshEndpoint: 'sshqa'
               runOptions: 'inline'
               
-              #failOnStdErr: false
               inline: |
                 
                 git config --global user.email "jenithangel@gmail.com"
@@ -170,8 +169,9 @@ stages:
                 fi   
                 git clone $(projectRepo) > log.txt  2>&1
                 filename=$(jobName)_$(deployversion).zip
-                if [ -f SourceFiles/$filename ]; then 
-                   echo "$filename Proceeding to import .
+                if [ -f SourceFiles/$filename ]
+                then 
+                   echo "$filename Proceeding to import "
                 else
                   echo "$filename doesnt exist. Please check the version"
                   exit 1
